@@ -23,7 +23,7 @@ import SubCategoryList from "./pages/Category/subcategoryList";
 import ProtectedRoute from "../src/components/protextedRoute";
 import { SearchProvider } from "./context/SearchContext";
  import Receipt from "./pages/Receipt";
-import { useLocation } from "react-router-dom";
+
 import AdminAuthHandler from "./AdminAuthHandler";
 import Users from "./pages/Users";
 import { editData, fetchDataFromApi, postData } from "./utils/api";

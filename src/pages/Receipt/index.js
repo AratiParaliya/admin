@@ -13,7 +13,7 @@ import { MdDelete } from "react-icons/md";
 import QRCode from "qrcode";
 import { SearchContext } from "../../context/SearchContext";
 import { Pagination } from "@mui/material";
-import { fetchDataFromApi } from "../../utils/api";
+import { deleteData, fetchDataFromApi } from "../../utils/api";
 
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
@@ -224,9 +224,7 @@ const fetchReceipts = async (pageNo = 1) => {
     if (!window.confirm("Delete this receipt?")) return;
 
     try {
-      await fetch(`http://localhost:4000/api/receipts/${id}`, {
-        method: "DELETE",
-      });
+      await deleteData(`http://localhost:4000/api/receipts/${id}`);
 
       fetchReceipts();
     } catch (err) {
