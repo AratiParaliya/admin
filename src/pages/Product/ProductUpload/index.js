@@ -4,14 +4,14 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useContext, useEffect, useRef, useState } from "react";
-import Rating from "@mui/material/Rating";
+
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Button from "@mui/material/Button";
 import { FaCloudUploadAlt, FaRegImages } from "react-icons/fa";
-import {  IoIosClose } from "react-icons/io"
+
 import CircularProgress from "@mui/material/CircularProgress";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { useParams } from "react-router-dom";
 import { MyContext } from "../../../App";
@@ -41,17 +41,8 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const ITEM_HEIGHT = 40;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 230,
-    }
-    ,
-  },
-}
+
+
 
 
 const ProductUpload = () => {
@@ -59,13 +50,13 @@ const ProductUpload = () => {
   const [categories, setCategories] = useState([]);
   const [uploading, setUploading] = useState();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [ setIsLoading] = useState(false);
 
   const [productImagesArr, setProductImagesArr] = useState([]);
-  const productImages = useRef();
+
   const [imgFiles, setImgFiles] = useState();
-const [previews, setpreviews] = useState([]);
-  const [subcategoryVal, setSubCategoryVal] = useState('');
+const [ setpreviews] = useState([]);
+  const [ setSubCategoryVal] = useState('');
   const [subCategory, setSubCategory] = useState([]);
 
   const { id } = useParams(); // 👈 get product id

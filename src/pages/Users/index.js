@@ -1,6 +1,6 @@
-import { FaDivide, FaEye, FaPencilAlt, FaUserCircle } from "react-icons/fa";
 
-import { MdDelete, MdShoppingBag } from "react-icons/md";
+
+import { MdDelete,} from "react-icons/md";
 
 import Button from "@mui/material/Button";
 import { styled, emphasize } from "@mui/material/styles";
@@ -53,7 +53,7 @@ const [selectedUser, setSelectedUser] = useState(null);
   const [userData, setuserData] = useState([]);
   const [page, setPage] = useState(1);
 const [totalPages, setTotalPages] = useState(1);
-const [totalUsers, setTotalUsers] = useState(0);
+const [, setTotalUsers] = useState(0);
   const { searchQuery } = useContext(SearchContext);
   
  const filteredData = userData?.filter((item) =>

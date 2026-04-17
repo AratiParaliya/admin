@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { FaUserCircle } from "react-icons/fa";
+
 import {HiDotsVertical, HiTrendingDown, HiTrendingUp} from "react-icons/hi"
 import Button from "@mui/material/Button";
 import Menu from '@mui/material/Menu';

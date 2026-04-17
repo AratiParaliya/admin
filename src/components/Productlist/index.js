@@ -1,6 +1,6 @@
-import { FaDivide, FaEye, FaPencilAlt, FaUserCircle } from "react-icons/fa";
 
-import { MdDelete, MdShoppingBag } from "react-icons/md";
+
+import { MdDelete,  } from "react-icons/md";
 
 import Button from "@mui/material/Button";
 
@@ -12,12 +12,13 @@ import Pagination from "@mui/material/Pagination";
 import { useContext, useEffect, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
-import Rating from "@mui/material/Rating";
-import { deleteData, editData, fetchDataFromApi, postData } from "../../utils/api";
+
+import { deleteData, fetchDataFromApi } from "../../utils/api";
 import { MyContext } from "../../App";
 
-import { useLocation } from "react-router-dom";
+
 import { SearchContext } from "../../context/SearchContext";
+import { FaEye, FaPencilAlt } from "react-icons/fa";
 
 
 const Productlist = () => {
