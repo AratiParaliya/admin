@@ -224,7 +224,7 @@ const fetchReceipts = async (pageNo = 1) => {
     if (!window.confirm("Delete this receipt?")) return;
 
     try {
-      await deleteData(`http://localhost:4000/api/receipts/${id}`);
+      await deleteData(`/api/receipts/${id}`);
 
       fetchReceipts();
     } catch (err) {

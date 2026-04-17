@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
  import { MenuItem, Select, Card, CardContent, Typography } from "@mui/material";
+import { editData1, fetchDataFromApi } from "../../utils/api";
 const UpdateOrder = () => {
   const { id } = useParams();
 
@@ -8,33 +9,43 @@ const UpdateOrder = () => {
   const [status, setStatus] = useState("");
   const [isPaid, setIsPaid] = useState(false);
 
-  useEffect(() => {
-    fetch(`http://localhost:4000/api/orders/${id}`)
-      .then(res => res.json())
-    .then(data => {
-  if (!data.order) return;
+ useEffect(() => {
+  const getOrder = async () => {
+    try {
+      const data = await fetchDataFromApi(`/api/orders/${id}`);
 
-  setOrder(data.order);
-  setStatus(data.order.status || "Pending");
-  setIsPaid(data.order.isPaid || false);
-});
-  }, [id]);
+      if (!data.order) return;
 
-  const updateStatus = async () => {
-    const res = await fetch(`http://localhost:4000/api/orders/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status, isPaid })
+      setOrder(data.order);
+      setStatus(data.order.status || "Pending");
+      setIsPaid(data.order.isPaid || false);
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  getOrder();
+}, [id]);
+
+const updateStatus = async () => {
+  try {
+    const data = await editData1(`/api/orders/${id}`, {
+      status,
+      isPaid
     });
-
-    const data = await res.json();
 
     if (data.success) {
       alert("Order Updated ✅");
     } else {
       alert("Update Failed ❌");
     }
-  };
+
+  } catch (err) {
+    console.log(err);
+    alert("Something went wrong ❌");
+  }
+};
 
   if (!order) return <h3>Loading...</h3>;
 
