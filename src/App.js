@@ -229,7 +229,7 @@ const addToCart = async (product, variant, variantType, qty = 1) => {
                   <Route path="/update-order/:id" element={<UpdateOrder />} />
                   <Route path="/serviceList" element={<ServiceList />} />
                   <Route path="/service/add" element={<ServiceUpload />} />
-                                      <Route path="/service/add/:id" element={<ServiceUpload />} />
+<Route path="/service/add/:id" element={<ServiceUpload />} />
               </Routes>
                )}
      
