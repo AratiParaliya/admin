@@ -300,7 +300,7 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   context.setisLogin(false);
-  //  window.open("http://localhost:3000/SignIn", "_self");
+   window.open("https://sh0pkart.netlify.app/SignIn", "_self");
 }}>
   <ListItemIcon>
     <Logout fontSize="small" />
