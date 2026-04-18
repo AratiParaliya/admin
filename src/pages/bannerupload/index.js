@@ -104,14 +104,14 @@ const onChangeFile = async (e) => {
 
     const res = await postData("/api/upload", formData, true);
 
-    if (res?.image) {
-      setBannerImage(res.image);
+   if (res?.images && res.images.length > 0) {
+  setBannerImage(res.images[0]);
 
-      setFormFields((prev) => ({
-        ...prev,
-        images: res.images
-      }));
-    }
+  setFormFields((prev) => ({
+    ...prev,
+    images: res.images
+  }));
+}
 
     setUploading(false);
 
@@ -135,10 +135,10 @@ const onChangeFile = async (e) => {
 
     setIsLoading(true);
 
-    const data = {
-      ...formFields,
-        image: bannerImage
-    };
+  const data = {
+  ...formFields,
+  images: [bannerImage]   // ✅ CORRECT
+};
 
     if (isEdit) {
       editData(`/api/banner/${id}`, data).then(() => {
