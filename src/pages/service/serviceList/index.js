@@ -51,6 +51,8 @@ const ServiceList = () => {
     setTotalPages(res.totalPages || 1);
   });
     };
+
+    
     const handleChange = (event, value) => {
   fetchServices(value);
 };
