@@ -427,12 +427,14 @@ const onChangeFile = async (e) => {
     const formdata = new FormData();
 
     for (let i = 0; i < files.length; i++) {
-      formdata.append("images", files[i]); // ✅ same key
+      formdata.append("images", files[i]); // ✅ IMPORTANT
     }
 
     setUploading(true);
 
-    const res = await postData('/api/products/upload', formdata);
+    const res = await postData('/api/upload', formdata);
+
+    console.log("UPLOAD RESPONSE:", res); // 🔍 debug
 
     if (res?.images) {
       setProductImagesArr(prev => [...prev, ...res.images]);
