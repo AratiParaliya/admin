@@ -94,10 +94,26 @@ const Sidebar = () => {
                         </div>
                     </li>
 
+                      <li>
+
+                        <Button className={`w-100 ${activeTab === 4  ? 'active' : ''}`} onClick={() => isOpenSubmenu(4)}>
+                            <span className="icon"> <MdCategory /></span>
+                           Services
+                            <span className="arrow"><FaAngleRight /></span>
+                        </Button>
+<div className={`submenuWrapper ${activeTab === 4 ? 'collapse' : ''}`}>
+                            <ul className="submenu">
+                             
+ <li><Link to="/serviceList">  Services List</Link></li>
+                                <li><Link to="/service/add">Add  Services</Link></li>
+                            </ul>
+                        </div>
+                    </li>
+
                      <li>
                         <Link to="/users">
                             
-                        <Button className={`w-100 ${activeTab === 4  ? 'active' : ''}`} >
+                        <Button className={`w-100 ${activeTab === 5  ? 'active' : ''}`} >
                             <span className="icon"> <FaCircleUser /></span>
                           Users
                             <span className="arrow"><FaAngleRight /></span>
@@ -107,7 +123,7 @@ const Sidebar = () => {
                     </li>
                       <li>
 <Link to="/orders">
-                        <Button className={`w-100 ${activeTab === 5  ? 'active' : ''}`} >
+                        <Button className={`w-100 ${activeTab === 6  ? 'active' : ''}`} >
                             <span className="icon"> <TbBorderStyle2 /></span>
                           Orders 
                             <span className="arrow"><FaAngleRight /></span>
@@ -116,7 +132,7 @@ const Sidebar = () => {
                     </li>
                          <li>
 <Link to="/Review">
-                        <Button className={`w-100 ${activeTab === 6  ? 'active' : ''}`} >
+                        <Button className={`w-100 ${activeTab === 7  ? 'active' : ''}`} >
                             <span className="icon"> <MdReviews /></span>
                           Reviews
                             <span className="arrow"><FaAngleRight /></span>
@@ -125,7 +141,7 @@ const Sidebar = () => {
                     </li>
                        <li>
 <Link to="/receipts">
-                        <Button className={`w-100 ${activeTab === 7  ? 'active' : ''}`} >
+                        <Button className={`w-100 ${activeTab === 8  ? 'active' : ''}`} >
                             <span className="icon"> <MdReviews /></span>
                           Receipts
                             <span className="arrow"><FaAngleRight /></span>
@@ -133,12 +149,12 @@ const Sidebar = () => {
 </Link>
                     </li>
                     <li>
-  <Button className={`w-100 ${activeTab === 8  ? 'active' : ''}`} onClick={() => isOpenSubmenu(8)}>
+  <Button className={`w-100 ${activeTab === 9  ? 'active' : ''}`} onClick={() => isOpenSubmenu(8)}>
                             <span className="icon"> <GiKnightBanner /></span>
                            Banner
                             <span className="arrow"><FaAngleRight /></span>
                         </Button>
-<div className={`submenuWrapper ${activeTab === 8 ? 'collapse' : ''}`}>
+<div className={`submenuWrapper ${activeTab === 9 ? 'collapse' : ''}`}>
                             <ul className="submenu">
                              
  <li><Link to="/banner-List">Banner List</Link></li>
@@ -148,7 +164,7 @@ const Sidebar = () => {
                     </li>
                         <li>
 <Link to="/Payments">
-                        <Button className={`w-100 ${activeTab === 9  ? 'active' : ''}`} >
+                        <Button className={`w-100 ${activeTab === 10  ? 'active' : ''}`} >
                             <span className="icon"> <MdPayments /></span>
                           Payment
                             <span className="arrow"><FaAngleRight /></span>
@@ -164,7 +180,7 @@ const Sidebar = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   context.setisLogin(false);
-   window.open("http://localhost:3000/SignIn", "_self");
+   window.open("https://sh0pkart.netlify.app//SignIn", "_self");
 }}><IoMdLogOut />Logout</Button>
                     </div>
 

@@ -35,6 +35,8 @@ import BannerList from "./pages/banner-list";
 import MyAccount from "./pages/MyAccount";
 import OrderDetails from "./pages/OrderDetails";
 import UpdateOrder from "./components/UpdateOrder";
+import ServiceList from "./pages/service/serviceList";
+import ServiceUpload from "./pages/service/serviceUplod";
 
 const MyContext = createContext();
 
@@ -224,7 +226,10 @@ const addToCart = async (product, variant, variantType, qty = 1) => {
                <Route path="/myAccount/:id" exact={true} element={<MyAccount/>} />
             <Route path="/admin/dashboard"element={  <ProtectedRoute adminOnly={true}>  <Dashboard /></ProtectedRoute> }     />
                 <Route path="/order/:id" element={<OrderDetails />} />
-                <Route path="/update-order/:id" element={<UpdateOrder />} />
+                  <Route path="/update-order/:id" element={<UpdateOrder />} />
+                  <Route path="/serviceList" element={<ServiceList />} />
+                  <Route path="/service/add" element={<ServiceUpload />} />
+                                      <Route path="/service/add/:id" element={<ServiceUpload />} />
               </Routes>
                )}
      
