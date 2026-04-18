@@ -50,13 +50,14 @@ const ProductUpload = () => {
   const [categories, setCategories] = useState([]);
   const [uploading, setUploading] = useState();
 
-  const [ setIsLoading] = useState(false);
 
+const [isLoading, setIsLoading] = useState(false);
+const [previews, setpreviews] = useState([]);
+const [subCategoryVal, setSubCategoryVal] = useState('');
   const [productImagesArr, setProductImagesArr] = useState([]);
 
   const [imgFiles, setImgFiles] = useState();
-const [ setpreviews] = useState([]);
-  const [ setSubCategoryVal] = useState('');
+
   const [subCategory, setSubCategory] = useState([]);
 
   const { id } = useParams(); // 👈 get product id
@@ -140,6 +141,8 @@ useEffect(() => {
       .then((res) => {
         setSubCategory(res?.subcategoryList || []);
       });
+    
+    
   }
 }, [formFields.category]);
 
@@ -251,7 +254,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product Name',
       });
-    return false;
+  setIsLoading(false);
+return;
     }
 
      if (formFields.description === "") {
@@ -260,7 +264,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product description',
       });
-     return false;
+  setIsLoading(false);
+return;
     }
     if (productImagesArr.length === 0) {
       context.setAlertBox({
@@ -268,7 +273,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product Image',
       });
-     return false;
+   setIsLoading(false);
+return;
     }
   
     if (formFields.brand === "") {
@@ -277,7 +283,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product Brand',
       });
-     return false;
+   setIsLoading(false);
+return;
     }
      if (formFields.discount === 0 || formFields.discount === "") {
       context.setAlertBox({
@@ -285,7 +292,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product Discount',
       });
-     return false;
+ setIsLoading(false);
+return;
     }
     if (formFields.price === 0 || formFields.price === "") {
       context.setAlertBox({
@@ -293,7 +301,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product Price',
       });
-     return false;
+setIsLoading(false);
+return;
     }
     if (formFields.oldPrice === 0 || formFields.oldPrice === "") {
       context.setAlertBox({
@@ -301,7 +310,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please add Product OldPrice',
       });
-     return false;
+     setIsLoading(false);
+return;
     }
  if (formFields.category === "") {
   context.setAlertBox({
@@ -309,7 +319,8 @@ const handleChangeProductRams = (event) => {
     error: true,
     msg: 'Please select the product category',
   });
-  return false;
+ setIsLoading(false);
+return;
     }
     if (formFields.subCategory === "") {
   context.setAlertBox({
@@ -317,7 +328,8 @@ const handleChangeProductRams = (event) => {
     error: true,
     msg: 'Please select the product subcategory',
   });
-  return false;
+ setIsLoading(false);
+return;
 }
    if (formFields.isFeatured === null || formFields.isFeatured === "") {
       context.setAlertBox({
@@ -325,7 +337,8 @@ const handleChangeProductRams = (event) => {
         error: true,
         msg: 'Please select the product is a featured or not',
       });
-     return false;
+    setIsLoading(false);
+return;
     }
 if (formFields.countInStock === "" || formFields.countInStock === 0) {
   context.setAlertBox({
@@ -333,7 +346,8 @@ if (formFields.countInStock === "" || formFields.countInStock === 0) {
     error: true,
     msg: 'Please add stock',
   });
-  return false;
+ setIsLoading(false);
+return;
 }
     // if (!formFields.rating) {
     //   context.setAlertBox({
@@ -341,7 +355,8 @@ if (formFields.countInStock === "" || formFields.countInStock === 0) {
     //     error: true,
     //     msg: 'Please add Rating'
     //   });
-    //  return false;
+    // setIsLoading(false);
+//return;
     // }
     
       
@@ -364,11 +379,18 @@ if (formFields.countInStock === "" || formFields.countInStock === 0) {
   } else {
     // ✅ ADD MODE
     postData('/api/products/create', data).then((res) => {
-      context.setAlertBox({
-        open: true,
-        error: false,
-        msg: "Product Created Successfully",
-      });
+      if (!res) {
+      throw new Error("API failed");
+    }
+
+    context.setAlertBox({
+      open: true,
+      error: false,
+      msg: "Product Created Successfully",
+    });
+
+    setIsLoading(false);
+    navigate('/products');
 
       setIsLoading(false);
       navigate('/products');
@@ -389,8 +411,10 @@ if (formFields.countInStock === "" || formFields.countInStock === 0) {
    productSIZE: [],
          productWEIGHT: [],
   
-    })
+       })
+      
     });
+       
   }
  
 
@@ -400,41 +424,25 @@ if (formFields.countInStock === "" || formFields.countInStock === 0) {
 const onChangeFile = async (e) => {
   try {
     const files = e.target.files;
-
-     const formdata = new FormData();
-
-    for (let i = 0; i < files.length; i++) {
-       formdata.append("images", files[i]);
-    }
-    console.log(files);        // should show selected files
-console.log(formdata.getAll("images")); // VERY IMPORTANT
-
     setUploading(true);
 
- const res = await postData('/api/products/upload', formdata);
-    console.log("UPLOAD RESPONSE:", res);
-    
+    for (let i = 0; i < files.length; i++) {
+      const formdata = new FormData();
+      formdata.append("image", files[i]); // ✅ correct
 
-if (res?.images) {
-  setProductImagesArr(prev => {
-    const updated = [...prev, ...res.images];
+      const res = await postData('/api/products/upload', formdata);
 
-    setFormFields((prevFields) => ({
-      ...prevFields,
-      images: updated
-    }));
-
-    return updated;
-  });
-}
+      if (res?.image) {
+        setProductImagesArr(prev => [...prev, res.image]);
+      }
+    }
 
     setUploading(false);
 
   } catch (error) {
-    // console.log(error);
     setUploading(false);
   }
-  };
+};
   
 
 // add new row
@@ -844,7 +852,7 @@ renderValue={(selected) => Array.isArray(selected) ? selected.join(', ') : ""}
 
   </div>
 
-  <Button type="submit" className="btn-blue btn-lg w-100 mt-4">
+  <Button type="submit"  onClick={handleSubmit} className="btn-blue btn-lg w-100 mt-4">
     <FaCloudUploadAlt /> &nbsp; Publish and View
   </Button>
 </div>
