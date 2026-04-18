@@ -98,18 +98,18 @@ const onChangeFile = async (e) => {
     const file = e.target.files[0]; // single file
 
     const formData = new FormData();
-    formData.append("image", file); // single image
+    formData.append("images", file); // single image
 
     setUploading(true);
 
-    const res = await postData("/api/banner/upload", formData, true);
+    const res = await postData("/api/upload", formData, true);
 
     if (res?.image) {
       setBannerImage(res.image);
 
       setFormFields((prev) => ({
         ...prev,
-        image: res.image
+        images: res.images
       }));
     }
 

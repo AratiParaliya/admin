@@ -103,7 +103,7 @@ const CategoryUpload = () => {
 
       setUploading(true);
 
-      const res = await postData('/api/category/upload', formdata);
+      const res = await postData('/api/upload', formdata);
 
       if (res?.images) {
         const newImages = [...productImagesArr, ...res.images];
