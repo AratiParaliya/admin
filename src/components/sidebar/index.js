@@ -149,7 +149,7 @@ const Sidebar = () => {
 </Link>
                     </li>
                     <li>
-  <Button className={`w-100 ${activeTab === 9  ? 'active' : ''}`} onClick={() => isOpenSubmenu(8)}>
+  <Button className={`w-100 ${activeTab === 9  ? 'active' : ''}`} onClick={() => isOpenSubmenu(9)}>
                             <span className="icon"> <GiKnightBanner /></span>
                            Banner
                             <span className="arrow"><FaAngleRight /></span>
