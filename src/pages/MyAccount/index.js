@@ -79,6 +79,7 @@ const handleImageChange = (e) => {
 };
 
   return (
+      <div className="right-content w-100">
     <section className="container mt-4">
       <div className="card shadow p-4">
         <h4 className="mb-3">Profile</h4>
@@ -275,7 +276,8 @@ const handleImageChange = (e) => {
           Save Changes
         </Button>
       </div>
-    </section>
+      </section>
+      </div>
   );
 };
 

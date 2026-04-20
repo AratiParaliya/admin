@@ -7,7 +7,7 @@ import { GiStarsStack } from "react-icons/gi"
 import Button from "@mui/material/Button";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IoIosTimer } from "react-icons/io";
 import { HiDotsVertical, } from "react-icons/hi";
 import { Chart } from "react-google-charts";
@@ -27,19 +27,50 @@ const Dashboard = () => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [revenueData, setRevenueData] = useState([]);
-const [orderVsPaymentData, setOrderVsPaymentData] = useState([]);
+  const [orderVsPaymentData, setOrderVsPaymentData] = useState([]);
+  const [orders, setOrders] = useState([]);
+
 const [stats, setStats] = useState({
   users: 0,
   orders: 0,
   products: 0,
   revenue: 0
 });
+
+useEffect(() => {
+  const getStats = async () => {
+    try {
+      const data = await fetchDataFromApi("/api/orders?limit=1000");
+
+      setStats({
+        revenue: data.totalRevenue,
+        maxRevenue: data.totalRevenue * 1.2 // better dynamic
+      });
+
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
+
+  getStats();
+}, []);
+
   
-const chartData = [
+const chartData = useMemo(() => [
   ["Type", "Amount"],
   ["Revenue", stats.revenue],
-  ["Remaining", 100000 - stats.revenue] // demo limit
-];
+  ["Remaining", Math.max(stats.maxRevenue - stats.revenue, 0)]
+], [stats]);
+
+  const options = useMemo(() => ({
+    backgroundColor: "transparent",
+  pieHole: 0.6,
+  legend: "none",
+  chartArea: { width: "100%", height: "100%" },
+  animation: { duration: 0 }
+}), []);
+
+  
 const [recentReceipts, setRecentReceipts] = useState([]);
     
     const open = Boolean(anchorEl);
@@ -226,7 +257,8 @@ const fetchDashboardData = async () => {
   ₹{stats.revenue}
 </h3>
 <p>Live revenue from receipts</p>
-                       <Chart
+                <Chart
+            
   chartType="PieChart"
   width="100%"
   height="170px"

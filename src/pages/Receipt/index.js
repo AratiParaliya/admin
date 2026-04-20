@@ -83,123 +83,140 @@ const [page, setPage] = useState(1);
   // ✅ PDF GENERATE
 
 
+
 const generatePDF = async (receipt) => {
   const orderId = receipt.orderId?._id || receipt.orderId;
-  if (!orderId) { alert("Order ID not found ❌"); return; }
+  if (!orderId) {
+    alert("Order ID not found ❌");
+    return;
+  }
 
-const qrUrl = `https://shopkartify.netlify.app/update-order/${orderId}`;
+  const qrUrl = `https://shopkartify.netlify.app/update-order/${orderId}`;
   const qrImage = await QRCode.toDataURL(qrUrl);
 
- const element = document.createElement("div");
+  // CREATE HIDDEN CONTAINER
+  const element = document.createElement("div");
 
-element.style.position = "fixed";
-element.style.top = "-9999px";   // hide from screen
-element.style.left = "0";
-element.style.width = "100%";
-element.style.display = "flex";
-element.style.justifyContent = "center"; // ✅ center horizontally
+  element.style.position = "fixed";
+  element.style.top = "-9999px";
+  element.style.left = "0";
+  element.style.width = "794px"; // ✅ A4 width in px
+  element.style.display = "flex";
+  element.style.justifyContent = "center";
+  element.style.background = "#ffffff";
 
-element.style.padding = "40px 0"; // spacing like real UI
   element.innerHTML = `
+    <div class="inv-wrap">
 
-
-<div class="inv-wrap">
-
-  <div class="inv-header">
-    <div>
-      <div class="inv-brand">My<span>Store</span></div>
-      <div style="font-size:12px;color:#64748b;margin-top:4px;">MyStore Pvt Ltd</div>
-      <div class="inv-badge">TAX INVOICE</div>
-    </div>
-    <div class="inv-header-meta">
-      <strong>Receipt #${receipt.receiptNumber}</strong><br/>
-      Order: ${receipt.orderId?._id || receipt.orderId}<br/>
-      Date: ${new Date(receipt.issuedAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}<br/>
-      GSTIN: XXXXXXXX
-    </div>
-  </div>
-
-  <div class="inv-body">
-    <div>
-      <div class="label">Bill To</div>
-      <div class="inv-addr">
-        <strong>${receipt.billingDetails.firstName} ${receipt.billingDetails.lastName}</strong>
-        ${receipt.billingDetails.address1}<br/>
-        ${receipt.billingDetails.city}, ${receipt.billingDetails.state}<br/>
-        ${receipt.billingDetails.country} — ${receipt.billingDetails.zipCode}<br/>
-        +${receipt.billingDetails.phone}
+      <!-- HEADER -->
+      <div class="inv-header">
+        <div>
+          <div class="inv-brand">My<span>Store</span></div>
+          <div style="font-size:12px;color:#cbd5e1;margin-top:4px;">MyStore Pvt Ltd</div>
+          <div class="inv-badge">TAX INVOICE</div>
+        </div>
+        <div class="inv-header-meta">
+          <strong>Receipt #${receipt.receiptNumber}</strong><br/>
+          Order: ${orderId}<br/>
+          Date: ${new Date(receipt.issuedAt).toLocaleDateString("en-IN")}<br/>
+          GSTIN: XXXXXXXX
+        </div>
       </div>
-    </div>
-    <div>
-      <div class="label">Scan to Track Order</div>
-      <div class="inv-qr-box">
-        <img src="${qrImage}" width="100" height="100" style="border-radius:6px;border:4px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.1);"/>
-        <div class="inv-qr-label">Scan to view & update<br/>your order status</div>
-        <div class="inv-method">${receipt.paymentMethod}</div>
+
+      <!-- BODY -->
+      <div class="inv-body">
+        <div>
+          <div class="label">Bill To</div>
+          <div class="inv-addr">
+            <strong>${receipt.billingDetails.firstName} ${receipt.billingDetails.lastName}</strong><br/>
+            ${receipt.billingDetails.address1}<br/>
+            ${receipt.billingDetails.city}, ${receipt.billingDetails.state}<br/>
+            ${receipt.billingDetails.country} — ${receipt.billingDetails.zipCode}<br/>
+            +${receipt.billingDetails.phone}
+          </div>
+        </div>
+
+        <div>
+          <div class="label">Scan to Track</div>
+          <div class="inv-qr-box">
+            <img src="${qrImage}" width="90"/>
+            <div class="inv-qr-label">Scan to track order</div>
+            <div class="inv-method">${receipt.paymentMethod}</div>
+          </div>
+        </div>
       </div>
+
+      <div class="inv-divider"></div>
+
+      <!-- TABLE -->
+      <div class="inv-table-wrap">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${receipt.items.map(item => `
+              <tr>
+                <td><strong>${item.name}</strong></td>
+                <td style="text-align:center;">${item.quantity}</td>
+                <td>₹${item.price}</td>
+                <td>₹${item.price * item.quantity}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+
+          <tfoot>
+            <tr class="inv-total-row">
+              <td colspan="3">Total</td>
+              <td>₹${receipt.amountPaid}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="inv-footer">
+        <div class="inv-footer-left">
+          This is a computer generated invoice.
+        </div>
+        <div class="inv-status">
+          <div class="inv-dot"></div>
+          ${receipt.paymentStatus}
+        </div>
+      </div>
+
     </div>
-  </div>
-
-  <div style="height:1px;background:#f0f0f0;margin:0 36px;"></div>
-
-  <div class="inv-table-wrap">
-    <table class="inv-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Qty</th>
-          <th>Unit Price</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${receipt.items.map(item => `
-          <tr>
-            <td><span class="inv-prod-name">${item.name}</span></td>
-            <td style="text-align:center;"><span class="inv-pill">${item.quantity}</span></td>
-            <td>₹${item.price.toLocaleString("en-IN")}</td>
-            <td>₹${(item.quantity * item.price).toLocaleString("en-IN")}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-      <tfoot>
-        <tr class="inv-total-row">
-          <td colspan="3">AMOUNT PAID</td>
-          <td>₹${receipt.amountPaid.toLocaleString("en-IN")}</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-
-  <div class="inv-footer">
-    <div class="inv-footer-left">
-      <strong>Sold by:</strong> MyStore Pvt Ltd &nbsp;|&nbsp; <strong>GSTIN:</strong> XXXXXXXX<br/>
-      This is a computer generated invoice. No signature required.
-    </div>
-    <div class="inv-status">
-      <div class="inv-dot"></div>
-      ${receipt.paymentStatus}
-    </div>
-  </div>
-
-</div>
-`;
+  `;
 
   document.body.appendChild(element);
-const invoice = element.querySelector(".inv-wrap");
 
-const canvas = await html2canvas(invoice, {
-  scale: 2,
-  useCORS: true
-});
+  const invoice = element.querySelector(".inv-wrap");
+
+  // CONVERT TO CANVAS
+  const canvas = await html2canvas(invoice, {
+    scale: 1.5, // ✅ FIXED SCALE (no zoom/cut)
+    useCORS: true
+  });
+
   const imgData = canvas.toDataURL("image/png");
-const pdf = new jsPDF("p", "px", "a4"); // ✅ standard size
 
-const imgWidth = 595; // A4 width in px
-const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  // CREATE PDF
+  const pdf = new jsPDF("p", "mm", "a4");
 
-pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+  const imgWidth = 210; // A4 width
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
   pdf.save(`receipt-${receipt.receiptNumber}.pdf`);
+
+  // CLEANUP
   document.body.removeChild(element);
 };
 

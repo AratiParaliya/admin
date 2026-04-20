@@ -1,6 +1,8 @@
 import axios from "axios";
 
 const BASE_URL = "https://server-l4qe.onrender.com";
+
+
 export const fetchDataFromApi = async (url, options = {}) => {
   const res = await fetch(`${BASE_URL}${url}`, {
     method: options.method || "GET",

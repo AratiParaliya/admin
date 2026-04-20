@@ -50,7 +50,8 @@ function App() {
 const [isLogin, setisLogin] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [authChecked, setAuthChecked] = useState(false);
-   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+     const [isHeaderSidebarShow, setIsHeaderSidebarShow] = useState(true);
   const [alertBox, setAlertBox] = useState({
     msg: '',
     error:false,
@@ -160,9 +161,9 @@ const addToCart = async (product, variant, variantType, qty = 1) => {
        addToCart,
      setisLogin,
      searchQuery,
-     setSearchQuery
-     
-  
+     setSearchQuery,
+     isHeaderSidebarShow,
+ setIsHeaderSidebarShow
    }
 
 
@@ -189,11 +190,17 @@ const addToCart = async (product, variant, variantType, qty = 1) => {
             {alertBox.msg}
           </Alert>
      </Snackbar>
-      <Header />
+      {
+          isHeaderSidebarShow === true &&   <Header />
+        }
       <div className="main d-flex">
-          <div className={`sidebarWrapper  ${isToggleSidebar === true ? "toggle" : ""}`}>
-          <Sidebar/>
-        </div>
+         {
+  isHeaderSidebarShow && (
+    <div className={`sidebarWrapper ${isToggleSidebar ? "toggle" : ""}`}>
+      <Sidebar />
+    </div>
+  )
+}
           <div className={`content  ${isToggleSidebar === true ? "toggle" : ""}`}>
             
 
@@ -237,7 +244,7 @@ const addToCart = async (product, variant, variantType, qty = 1) => {
 
           </div>
        
-        </MyContext.Provider>+
+        </MyContext.Provider>
         </SearchProvider>
     </BrowserRouter>
   

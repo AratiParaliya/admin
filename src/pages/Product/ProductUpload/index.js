@@ -1,15 +1,18 @@
 import { styled, emphasize } from "@mui/material/styles";
-import Chip from "@mui/material/Chip";
+
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useContext, useEffect, useRef, useState } from "react";
-
+import { Autocomplete, TextField } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Button from "@mui/material/Button";
-import { FaCloudUploadAlt, FaRegImages } from "react-icons/fa";
 
+import { FaCloudUploadAlt, FaRegImages } from "react-icons/fa";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { Button, IconButton, Chip, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -60,6 +63,16 @@ const [subCategoryVal, setSubCategoryVal] = useState('');
 
   const [subCategory, setSubCategory] = useState([]);
 
+  const [showSizeInput, setShowSizeInput] = useState(false);
+  const [showWeightInput, setShowWeightInput] = useState(false);
+  const [showRamInput, setShowRamInput] = useState(false);
+
+  // 🔹 Custom values
+  const [customSize, setCustomSize] = useState("");
+  const [customWeight, setCustomWeight] = useState("");
+  const [customRam, setCustomRam] = useState("");
+
+
   const { id } = useParams(); // 👈 get product id
   const isEditMode = Boolean(id);
   
@@ -85,7 +98,47 @@ const [subCategoryVal, setSubCategoryVal] = useState('');
   productWEIGHT:[],
  });
   
+  
+ 
+  const defaultSizeOptions = ["S","M","L","XL","XXL",
+    "Small","Medium","Large",
+    "IND-4","IND-5","IND-6","IND-7","IND-8",
+    "28","30","32","34","36"];
+  const defaultWeightOptions = ["500GM","1KG","2KG","3KG"];
+  const defaultRamOptions = ["4GB","6GB","8GB","10GB","12GB"];
 
+  // 🔥 Merge DB values with default options (IMPORTANT)
+  const sizeOptions = [
+    ...new Set([...(formFields.productSIZE || []), ...defaultSizeOptions])
+  ];
+
+  const weightOptions = [
+    ...new Set([...(formFields.productWEIGHT || []), ...defaultWeightOptions])
+  ];
+
+  const ramOptions = [
+    ...new Set([...(formFields.productRAMS || []), ...defaultRamOptions])
+  ];
+  
+ const addValue = (field, value, setCustom, setShow) => {
+    if (!value) return;
+
+    const existing = formFields[field] || [];
+
+    if (existing.includes(value)) {
+      setCustom("");
+      setShow(false);
+      return;
+    }
+
+    setFormFields({
+      ...formFields,
+      [field]: [...existing, value]
+    });
+
+    setCustom("");
+    setShow(false);
+  };
   
 useEffect(() => {
   if (id !== undefined) {
@@ -651,99 +704,288 @@ const handleSpecChange = (index, field, value) => {
 </Select>
                   </div>
                 </div>
-                 
-                 <div className="col">
-                  <div className="form-group">
-                    <h6 className="text-uppercase">ProductRAMS</h6>
-                        <Select
-                           multiple 
-         value={formFields.productRAMS}
-          onChange={handleChangeProductRams}
-                          displayEmpty
-                      renderValue={(selected) => Array.isArray(selected) ? selected.join(', ') : ""}
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                className="w-100"
-                        >
-                            
-                                
-          <MenuItem value="">
-            <em value="">Select</em>
-          </MenuItem>
-          <MenuItem value={"8GB"}>8GB</MenuItem>
-                          <MenuItem value={"6GB"}>6GB</MenuItem>
-                            <MenuItem value={"4GB"}>4GB</MenuItem>
-                      
-                          <MenuItem value={"12GB"}>12GB</MenuItem>
-                             <MenuItem value={"10GB"}>10GB</MenuItem>
-        
-                                </Select>
-                  </div>
-                </div>
-                  </div>
-              
-                   <div className="row">
-                <div className="col">
+                  <div className="col">
                   <div className="form-group">
                     <h6>Product Color</h6>
                                         <input type="text" name="color" value={formFields.color} onChange={inputChange} placeholder="type here"/>
 
                   </div>
                     </div>
-                 
-                  <div className="col">
-                  <div className="form-group">
-                    <h6 className="text-uppercase">ProductWEIGHT</h6>
-                       <Select
-  multiple
-  value={formFields.productWEIGHT}
-  onChange={handleChangeProductWeight}
-renderValue={(selected) => Array.isArray(selected) ? selected.join(', ') : ""}
-  className="w-100"
->
-  <MenuItem value="500GM">500GM</MenuItem>
-  <MenuItem value="1KG">1KG</MenuItem>
-  <MenuItem value="2KG">2KG</MenuItem>
-  <MenuItem value="3KG">3KG</MenuItem>
-</Select>
+             
                   </div>
-                </div>
-                <div className="col">
-                  <div className="form-group">
-                    <h6 className="text-uppercase">ProductSIZE</h6>
-                     <Select
-  multiple
-  value={formFields.productSIZE}
-  onChange={handleChangeProductSize}
-renderValue={(selected) => Array.isArray(selected) ? selected.join(', ') : ""}
-  className="w-100"
->
-  <MenuItem value="S">S</MenuItem>
-  <MenuItem value="M">M</MenuItem>
-  <MenuItem value="L">L</MenuItem>
-  <MenuItem value="XL">XL</MenuItem>
-                          <MenuItem value="XXL">XXL</MenuItem>
-                          <MenuItem value="S">S</MenuItem>
-                          
-  <MenuItem value="Small">Small</MenuItem>
-  <MenuItem value="MEdium">Medium</MenuItem>
-                          <MenuItem value="Large">Large</MenuItem>
-                          
-                          <MenuItem value="IND-4">IND-4</MenuItem>
-                          <MenuItem value="IND-5">IND-5</MenuItem>
-                            <MenuItem value="IND-6">IND-6</MenuItem>
-                              <MenuItem value="IND-7">IND-7</MenuItem>
-                          <MenuItem value="IND-8">IND-8</MenuItem>
+              
+      <div className="row">
 
-                            <MenuItem value="28">28</MenuItem>
-  <MenuItem value="30">30</MenuItem>
-                          <MenuItem value="32">32</MenuItem>
-                          <MenuItem value="34">34</MenuItem>
-                          <MenuItem value="36">36</MenuItem>
-                          
+      {/* ================= SIZE ================= */}
+      <div className="col">
+        <div className="form-group">
+          <h6 className="text-uppercase">Product Size</h6>
+
+<Select
+  multiple
+  value={formFields.productSIZE || []}
+  onChange={(e) =>
+    setFormFields({
+      ...formFields,
+      productSIZE: e.target.value
+    })
+  }
+  className="w-100"
+  renderValue={(selected) => (
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+      {selected.map((value) => (
+        <Chip
+          key={value}
+          label={value}
+          onDelete={() => {
+            const updated = formFields.productSIZE.filter(
+              (item) => item !== value
+            );
+            setFormFields({
+              ...formFields,
+              productSIZE: updated
+            });
+          }}
+          onMouseDown={(e) => e.stopPropagation()} // ✅ prevents dropdown open
+        />
+      ))}
+    </Box>
+  )}
+>
+  {sizeOptions.map((item) => (
+    <MenuItem key={item} value={item}>
+      {item}
+    </MenuItem>
+  ))}
 </Select>
-                  </div>
-                </div>
-                  </div>
+
+          <Button size="small" onClick={() => setShowSizeInput(!showSizeInput)}>
+            + Add Custom
+          </Button>
+{showSizeInput && (
+  <div className="custom-input-box">
+
+    <TextField
+      size="small"
+      autoFocus
+      variant="outlined"
+      className="custom-textfield"
+      value={customSize}
+      onChange={(e) => setCustomSize(e.target.value)}
+      placeholder="Enter size (e.g. XXL)"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          addValue("productSIZE", customSize, setCustomSize, setShowSizeInput);
+        }
+      }}
+    />
+
+    {/* ➕ Add */}
+    <Button
+      className="icon-btn add-btn"
+      onClick={() =>
+        addValue("productSIZE", customSize, setCustomSize, setShowSizeInput)
+      }
+    >
+      +
+    </Button>
+
+    {/* ❌ Cancel */}
+    <Button
+      className="icon-btn cancel-btn"
+      onClick={() => {
+        setShowSizeInput(false);
+        setCustomSize("");
+      }}
+    >
+      ✕
+    </Button>
+
+  </div>
+)}
+        </div>
+      </div>
+
+      {/* ================= WEIGHT ================= */}
+      <div className="col">
+        <div className="form-group">
+          <h6 className="text-uppercase">Product Weight</h6>
+
+<Select
+  multiple
+  value={formFields.productWEIGHT || []}
+  onChange={(e) =>
+    setFormFields({
+      ...formFields,
+      productWEIGHT: e.target.value
+    })
+  }
+  className="w-100"
+  renderValue={(selected) => (
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+      {selected.map((value) => (
+        <Chip
+          key={value}
+          label={value}
+          onDelete={() => {
+            const updated = formFields.productWEIGHT.filter(
+              (item) => item !== value
+            );
+            setFormFields({
+              ...formFields,
+              productWEIGHT: updated
+            });
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+        />
+      ))}
+    </Box>
+  )}
+>
+  {weightOptions.map((item) => (
+    <MenuItem key={item} value={item}>
+      {item}
+    </MenuItem>
+  ))}
+</Select>
+
+          <Button size="small" onClick={() => setShowWeightInput(!showWeightInput)}>
+            + Add Custom
+          </Button>
+{showWeightInput && (
+  <div className="custom-input-box">
+
+    <TextField
+      size="small"
+      autoFocus
+      variant="outlined"
+      className="custom-textfield"
+      value={customWeight}
+      onChange={(e) => setCustomWeight(e.target.value)}
+      placeholder="Enter weight (e.g. 1.5kg)"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          addValue("productWEIGHT", customWeight, setCustomWeight, setShowWeightInput);
+        }
+      }}
+    />
+
+    {/* ➕ Add */}
+    <Button
+      className="icon-btn add-btn"
+      onClick={() =>
+        addValue("productWEIGHT", customWeight, setCustomWeight, setShowWeightInput)
+      }
+    >
+      +
+    </Button>
+
+    {/* ❌ Cancel */}
+    <Button
+      className="icon-btn cancel-btn"
+      onClick={() => {
+        setShowWeightInput(false);
+        setCustomWeight("");
+      }}
+    >
+      ✕
+    </Button>
+
+  </div>
+)}
+        </div>
+      </div>
+
+      {/* ================= RAM ================= */}
+      <div className="col">
+        <div className="form-group">
+          <h6 className="text-uppercase">Product RAM</h6>
+<Select
+  multiple
+  value={formFields.productRAMS || []}
+  onChange={(e) =>
+    setFormFields({
+      ...formFields,
+      productRAMS: e.target.value
+    })
+  }
+  className="w-100"
+  renderValue={(selected) => (
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+      {selected.map((value) => (
+        <Chip
+          key={value}
+          label={value}
+          onDelete={() => {
+            const updated = formFields.productRAMS.filter(
+              (item) => item !== value
+            );
+            setFormFields({
+              ...formFields,
+              productRAMS: updated
+            });
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+        />
+      ))}
+    </Box>
+  )}
+>
+  {ramOptions.map((item) => (
+    <MenuItem key={item} value={item}>
+      {item}
+    </MenuItem>
+  ))}
+</Select>
+
+          <Button size="small" onClick={() => setShowRamInput(!showRamInput)}>
+            + Add Custom
+          </Button>
+{showRamInput && (
+  <div className="custom-input-box">
+
+    <TextField
+      size="small"
+      autoFocus
+      variant="outlined"
+      className="custom-textfield"
+      value={customRam}
+      onChange={(e) => setCustomRam(e.target.value)}
+      placeholder="Enter RAM (e.g. 16GB)"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          addValue("productRAMS", customRam, setCustomRam, setShowRamInput);
+        }
+      }}
+    />
+
+    {/* ➕ Add */}
+    <Button
+      className="icon-btn add-btn"
+      onClick={() =>
+        addValue("productRAMS", customRam, setCustomRam, setShowRamInput)
+      }
+    >
+      +
+    </Button>
+
+    {/* ❌ Cancel */}
+    <Button
+      className="icon-btn cancel-btn"
+      onClick={() => {
+        setShowRamInput(false);
+        setCustomRam("");
+      }}
+    >
+      ✕
+    </Button>
+
+  </div>
+)}
+        </div>
+      </div>
+
+    </div>
 
 <div className="card p-4 mt-3">
   <h5 className="mb-4">Product Specifications</h5>

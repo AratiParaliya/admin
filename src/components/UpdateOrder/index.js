@@ -1,13 +1,23 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
  import { MenuItem, Select, Card, CardContent, Typography } from "@mui/material";
 import { editData1, fetchDataFromApi } from "../../utils/api";
+import { MyContext } from "../../App";
 const UpdateOrder = () => {
   const { id } = useParams();
 
   const [order, setOrder] = useState(null);
   const [status, setStatus] = useState("");
   const [isPaid, setIsPaid] = useState(false);
+  const context = useContext(MyContext);
+  
+useEffect(() => {
+  context.setIsHeaderSidebarShow(false); // ✅ hide
+
+  return () => {
+    context.setIsHeaderSidebarShow(true); // ✅ show again when leaving
+  };
+}, []);
 
  useEffect(() => {
   const getOrder = async () => {
