@@ -1687,7 +1687,57 @@ textarea {
   font-size: 13px;
   line-height: 1.6;
 }
+.success-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
 
+.checkmark-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #4caf50;
+  position: relative;
+  transform: scale(0);
+  animation: pop 0.4s ease forwards;
+}
+
+.checkmark {
+  width: 25px;
+  height: 50px;
+  border-right: 4px solid white;
+  border-bottom: 4px solid white;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 15px;
+  left: 26px;
+  opacity: 0;
+  animation: draw 0.3s ease forwards 0.4s;
+}
+
+@keyframes pop {
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes draw {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
 /* ===== QR BOX ===== */
 .inv-qr-box {
   background: #f8fafc;
