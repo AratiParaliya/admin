@@ -4,8 +4,7 @@ import { fetchDataFromApi } from "../../utils/api";
 import Button from "@mui/material/Button";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import QRCode from "qrcode";
-const OrderDetails = () => {
+import QRCode from "qrcode";const OrderDetails = () => {
 
   const { id } = useParams();
   const [order, setOrder] = useState(null);
@@ -16,24 +15,9 @@ const OrderDetails = () => {
 
     
     const navigate = useNavigate();
-const [qrCode, setQrCode] = useState("");
 
-useEffect(() => {
-  if (order && order.paymentMethod === "COD") {
-    generateQR();
-  }
-}, [order]);
 
-const generateQR = async () => {
-  const qrData = `
-  Pay ₹${order.totalPrice}
-  Order: ${order._id}
-  Name: ${order.userId?.name}
-  `;
 
-  const url = await QRCode.toDataURL(qrData);
-  setQrCode(url);
-};
 
 const downloadInvoice = async () => {
   const element = document.getElementById("invoice");
@@ -317,12 +301,7 @@ const downloadInvoice = async () => {
     </div>
 
     {/* QR CODE (ONLY COD) */}
-    {order.paymentMethod === "COD" && qrCode && (
-      <div className="qr-section">
-        <p>Scan to Pay</p>
-        <img src={qrCode} width="120" />
-      </div>
-    )}
+  
   </div>
 
   {/* FOOTER */}

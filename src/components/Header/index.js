@@ -82,54 +82,7 @@ const Header = () => {
               <MdOutlineLightMode />
             </Button>
 
-            {/* Notifications dropdown placeholder */}
-            <div className="dropdownwrapper position-relative">
-              <Menu
-                anchorEl={isOpennotificationsDrop}
-                className="notifications dropdown_list"
-                id="notifications"
-                open={opennotifications}
-                onClose={handleClosenotificationsDrop}
-                onClick={handleClosenotificationsDrop}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <div className="head pl-3 pb-0">
-                  <h4>Orders (12)</h4>
-                </div>
-                <Divider className="mb-1" />
-                <div className="scroll">
-                  {[...Array(5)].map((_, i) => (
-                    <MenuItem key={i} onClick={handleClosenotificationsDrop}>
-                      <div className="d-flex">
-                        <div className="userImg">
-                          <span className="rounded-circle">
-                            <img
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAa5feWGju95NLmf97imfDRjqJ1OhbK7DZEg&s"
-                              alt="user"
-                            />
-                          </span>
-                        </div>
-                        <div className="dropdowninfo">
-                          <h4>
-                            <span>
-                              <b>Mahmudul</b> added to his favorite list{" "}
-                              <b>Leather belt steve madden</b>
-                            </span>
-                          </h4>
-                          <p className="text-sky mb-0">few seconds ago</p>
-                        </div>
-                      </div>
-                    </MenuItem>
-                  ))}
-                </div>
-                <div className="pl-3 pr-3 w-100 pt-2 pb-1">
-                  <Button className="btn-blue w-100">
-                    View all Notifications
-                  </Button>
-                </div>
-              </Menu>
-            </div>
+        
 
             {/* My Account */}
             <div className="myAccWrapper">

@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { editData, fetchDataFromApi } from "../../utils/api";
+import { MyContext } from "../../App";
 
 const MyAccount = () => {
 
   const [image, setImage] = useState("");
-const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState("");
+  const context = useContext(MyContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -72,9 +74,17 @@ const handleImageChange = (e) => {
   const res = await editData(`/api/user/${user._id}`, form, true);
 
   if (!res?.error) {
-    alert("Profile updated successfully!");
+    context.setAlertBox({
+        open: true,
+        error:false,
+        msg: 'Profile updated successfully',
+      });
   } else {
-    alert("Failed to update profile");
+    context.setAlertBox({
+        open: true,
+        error:true,
+        msg: 'Failed to update profile',
+      });
   }
 };
 
